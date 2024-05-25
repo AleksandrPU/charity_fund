@@ -9,19 +9,14 @@ class DonationCreate(BaseModel):
     full_amount: PositiveInt
 
 
-class DonationDBUser(BaseModel):
+class DonationDBUser(DonationCreate):
     id: int
-    comment: Optional[str]
-    full_amount: PositiveInt
     create_date: datetime
 
 
-class DonationDBSuperUser(BaseModel):
-    id: int
+class DonationDBSuperUser(DonationDBUser):
     user_id: int
-    comment: Optional[str]
-    full_amount: PositiveInt
+    full_amount: int
     invested_amount: int = 0
     fully_invested: bool = False
-    create_date: datetime
     close_date: Optional[datetime] = None
