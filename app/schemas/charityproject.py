@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, PositiveInt
+from pydantic import BaseModel, Field, PositiveInt, validator
 
 
 class CharityProjectCreate(BaseModel):
@@ -9,13 +9,22 @@ class CharityProjectCreate(BaseModel):
     description: str = Field(min_length=1)
     full_amount: PositiveInt
 
+    @validator('name')
+    def name_cant_be_null(cls, value):
+        if value is None:
+            raise ValueError('Название проекта не может быть пустым.')
+        return value
 
-class CharityProjectDB(BaseModel):
+
+class CharityProjectDB(CharityProjectCreate):
     id: int
-    name: str = Field(min_length=1, max_length=100)
-    description: str = Field(..., min_length=1)
-    full_amount: PositiveInt
     invested_amount: int
     fully_invested: bool
     create_date: datetime
     close_date: Optional[datetime] = None
+
+
+class CharityProjectUpdate(CharityProjectCreate):
+    name: Optional[str] = Field(min_length=1, max_length=100)
+    description: Optional[str] = Field(min_length=1)
+    full_amount: Optional[PositiveInt]
