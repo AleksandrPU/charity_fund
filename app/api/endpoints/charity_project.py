@@ -12,7 +12,7 @@ from app.api.validators import (
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charityproject import charity_project_crud
-from app.schemas.charityproject import (
+from app.schemas.charity_project import (
     CharityProjectCreate,
     CharityProjectDB,
     CharityProjectUpdate,
@@ -45,7 +45,7 @@ async def create_project(
 ):
     await check_name_duplicate(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
-    return new_project
+    return jsonable_encoder(new_project)
 
 
 @router.delete(
