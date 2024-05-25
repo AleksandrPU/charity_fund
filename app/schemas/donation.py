@@ -16,7 +16,7 @@ class DonationDBUser(BaseModel):
     create_date: datetime
 
 
-class DonationDBSuperuser(BaseModel):
+class DonationDBSuperUser(BaseModel):
     id: int
     user_id: int
     comment: Optional[str]
@@ -24,4 +24,4 @@ class DonationDBSuperuser(BaseModel):
     invested_amount: int = 0
     fully_invested: bool = False
     create_date: datetime
-    close_date: datetime
+    close_date: Optional[datetime] = None
