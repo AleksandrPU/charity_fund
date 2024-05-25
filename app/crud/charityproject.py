@@ -17,7 +17,9 @@ class CRUDCharityProject(CRUDBase, UpdateMixin, DeleteMixin):
             session: AsyncSession
     ) -> Optional[int]:
         db_project_id = await session.execute(
-            select(CharityProject.id).where(CharityProject.name == project_name)
+            select(CharityProject.id).where(
+                CharityProject.name == project_name
+            )
         )
         db_project_id = db_project_id.scalars().first()
         return db_project_id
