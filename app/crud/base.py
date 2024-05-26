@@ -11,10 +11,15 @@ class CRUDBase:
     def __init__(self, model):
         self.model = model
 
-    async def get_multi(self, session: AsyncSession):
-        db_objs = await session.execute(
-            select(self.model)
-        )
+    async def get_multi(
+            self,
+            session: AsyncSession,
+            not_full_invested: bool = False
+    ):
+        query = select(self.model)
+        if not_full_invested:
+            query = query.where(~self.model.fully_invested)
+        db_objs = await session.execute(query)
         return db_objs.scalars().all()
 
     async def create(
@@ -29,7 +34,9 @@ class CRUDBase:
 
         db_obj = self.model(**obj_in_data)
 
-        session.add(db_obj)
+        from app.services.charity_project import CharityProjectService
+        await CharityProjectService(session).add_to_queue(db_obj)
+
         await session.commit()
         await session.refresh(db_obj)
 
