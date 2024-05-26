@@ -133,6 +133,10 @@ dmypy.json
 
 # backup
 backup/
+*.bak
 
 # db
 fastapi.db
+
+# vim swap
+*.swp
