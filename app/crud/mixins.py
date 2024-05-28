@@ -31,9 +31,14 @@ class UpdateMixin(GetMixin):
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
 
-        session.add(db_obj)
+        # session.add(db_obj)
+        # print(f'>>> {db_obj.__dict__=}')
+        from app.services.charity_project import CharityProjectService
+        await CharityProjectService(session).add_to_queue(db_obj)
+
         await session.commit()
         await session.refresh(db_obj)
+        # print(f'<<< {db_obj.__dict__=}')
 
         return db_obj
 
