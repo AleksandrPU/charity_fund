@@ -7,6 +7,7 @@ from sqlalchemy.engine import URL
 class Settings(BaseSettings):
     app_title: str = 'QRKot'
     app_description: str = 'Фонд собирает пожертвования на различные проекты.'
+<<<<<<< Updated upstream
     # database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
     # database_url: str = 'postgresql+asyncpg://fastapi:mysecretpassword@db:5432/fastapi'
     # dialect+driver://username:password@host:port/database
@@ -23,6 +24,13 @@ class Settings(BaseSettings):
         host=database_host,
         database=database_db,
     )
+=======
+    database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
+    # postgres_user: str = 'fastapi'
+    # postgres_password: str = 'mysecretpassword'
+    # postgres_db: str = 'fastapi'
+    # database_url: str = 'postgresql+asyncpg://fastapi:mysecretpassword@db:5432/fastapi'
+>>>>>>> Stashed changes
     secret: str = 'secret'
     token_lifetime: int = 3600
     first_superuser_email: Optional[EmailStr] = None
