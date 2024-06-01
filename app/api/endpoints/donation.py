@@ -45,7 +45,7 @@ async def get_all_donations(
         session: AsyncSession = Depends(get_async_session)
 ):
     """Вывести все пожертвования.
-    Только для супер пользователей!
+    Только для суперпользователей!
     """
 
     donations = await donation_crud.get_multi(session)

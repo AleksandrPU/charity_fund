@@ -47,7 +47,7 @@ async def create_project(
         session: AsyncSession = Depends(get_async_session)
 ):
     """Добавить проект.
-    Только для супер пользователей!
+    Только для суперпользователей!
     """
 
     await check_name_duplicate(charity_project.name, session)
@@ -67,7 +67,7 @@ async def delete_project(
         session: AsyncSession = Depends(get_async_session)
 ):
     """Удалить неинвестированный проект.
-    Только для супер пользователей!
+    Только для суперпользователей!
     """
 
     project = await check_project_exists(project_id, session)
@@ -90,7 +90,7 @@ async def update_project(
         session: AsyncSession = Depends(get_async_session)
 ):
     """Изменить проект.
-    Только для супер пользователей!
+    Только для суперпользователей!
     """
 
     project = await check_project_exists(project_id, session)
