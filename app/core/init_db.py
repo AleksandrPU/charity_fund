@@ -30,7 +30,7 @@ async def create_user(
                         )
                     )
     except UserAlreadyExists:
-        pass
+        print(f'Пользователь {email} уже зарегистрирован.')
 
 
 async def create_first_superuser():
