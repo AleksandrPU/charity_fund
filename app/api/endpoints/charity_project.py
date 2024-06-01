@@ -17,7 +17,7 @@ from app.schemas.charity_project import (
     CharityProjectDB,
     CharityProjectUpdate,
 )
-from app.services.investment import investment_service
+from app.services.investment import investment
 
 router = APIRouter()
 
@@ -45,8 +45,8 @@ async def create_project(
         session: AsyncSession = Depends(get_async_session)
 ):
     await check_name_duplicate(charity_project.name, session)
-    new_project = await charity_project_crud.create_object(charity_project)
-    new_project = await investment_service.investment(new_project, session)
+    new_project = await charity_project_crud.create(charity_project, session)
+    new_project = await investment(new_project, session)
     return jsonable_encoder(new_project)
 
 
@@ -89,5 +89,6 @@ async def update_project(
         await check_project_full_amount(project, project_in.full_amount)
 
     project = await charity_project_crud.update(project, project_in, session)
+    project = await investment(project, session)
 
     return jsonable_encoder(project)
