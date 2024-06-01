@@ -9,6 +9,8 @@ async def check_name_duplicate(
         project_name: str,
         session: AsyncSession,
 ) -> None:
+    """Проверка уникальности имени проекта."""
+
     project_id = await charity_project_crud.get_project_id_by_name(
         project_name, session
     )
@@ -23,6 +25,8 @@ async def check_project_exists(
         project_id: int,
         session: AsyncSession,
 ) -> CharityProject:
+    """Проверка существования проекта."""
+
     project = await charity_project_crud.get(project_id, session)
 
     if project is None:
@@ -37,6 +41,8 @@ async def check_project_exists(
 async def check_project_open(
         project: CharityProject,
 ) -> None:
+    """Проверка, что проект открыт для инвестирования."""
+
     if project.fully_invested:
         raise HTTPException(
             status_code=400,
@@ -47,6 +53,8 @@ async def check_project_open(
 async def check_project_empty(
         project: CharityProject,
 ) -> None:
+    """Проверка отсутствия инвестиций в проекте."""
+
     if project.invested_amount != 0:
         raise HTTPException(
             status_code=400,
@@ -58,6 +66,8 @@ async def check_project_full_amount(
         project: CharityProject,
         full_amount: int,
 ) -> None:
+    """Проверка, сумма проекта не меньше уже проинвестированной суммы."""
+
     if project.invested_amount > full_amount:
         raise HTTPException(
             status_code=400,

@@ -17,7 +17,7 @@ from app.schemas.charity_project import (
     CharityProjectDB,
     CharityProjectUpdate,
 )
-from app.services.investment import investment
+from app.services.investment import close_project_donation, investment
 
 router = APIRouter()
 
@@ -30,6 +30,8 @@ router = APIRouter()
 async def get_all_projects(
         session: AsyncSession = Depends(get_async_session)
 ):
+    """Вывести все текущие проекты."""
+
     projects = await charity_project_crud.get_multi(session)
     return jsonable_encoder(projects)
 
@@ -44,6 +46,10 @@ async def create_project(
         charity_project: CharityProjectCreate,
         session: AsyncSession = Depends(get_async_session)
 ):
+    """Добавить проект.
+    Только для супер пользователей!
+    """
+
     await check_name_duplicate(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
     new_project = await investment(new_project, session)
@@ -60,6 +66,10 @@ async def delete_project(
         project_id: int,
         session: AsyncSession = Depends(get_async_session)
 ):
+    """Удалить неинвестированный проект.
+    Только для супер пользователей!
+    """
+
     project = await check_project_exists(project_id, session)
     await check_project_open(project)
     await check_project_empty(project)
@@ -79,6 +89,10 @@ async def update_project(
         project_in: CharityProjectUpdate,
         session: AsyncSession = Depends(get_async_session)
 ):
+    """Изменить проект.
+    Только для супер пользователей!
+    """
+
     project = await check_project_exists(project_id, session)
     await check_project_open(project)
 
@@ -89,6 +103,7 @@ async def update_project(
         await check_project_full_amount(project, project_in.full_amount)
 
     project = await charity_project_crud.update(project, project_in, session)
+    project = await close_project_donation(project)
     project = await investment(project, session)
 
     return jsonable_encoder(project)

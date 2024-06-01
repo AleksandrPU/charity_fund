@@ -20,6 +20,7 @@ class CRUDBase:
         if not_full_invested:
             query = query.where(~self.model.fully_invested)
         db_objs = await session.execute(query)
+
         return db_objs.scalars().all()
 
     async def create(
