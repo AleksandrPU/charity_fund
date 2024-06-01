@@ -11,6 +11,17 @@ class CRUDBase:
     def __init__(self, model):
         self.model = model
 
+    async def create_object(
+            self,
+            obj_in,
+            user: Optional[User] = None,
+    ):
+        obj_in_data = obj_in.dict()
+        if user is not None:
+            obj_in_data['user_id'] = user.id
+
+        return self.model(**obj_in_data)
+
     async def get_multi(
             self,
             session: AsyncSession,
@@ -34,8 +45,8 @@ class CRUDBase:
 
         db_obj = self.model(**obj_in_data)
 
-        from app.services.charity_project import CharityProjectService
-        await CharityProjectService(session).add_to_queue(db_obj)
+        # from app.services.charity_project import CharityProjectService
+        # await CharityProjectService(session).add_to_queue(db_obj)
 
         await session.commit()
         await session.refresh(db_obj)
