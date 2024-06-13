@@ -1,11 +1,26 @@
 from collections import deque
 from datetime import datetime
+from queue import Queue
 from typing import Union
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud import charity_project_crud, donation_crud
 from app.models import CharityProject, Donation
+from app.core.config import logger
+
+investment_queue = Queue()
+
+# formatter = logging.Formatter('%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
+
+# file_handler = logging.FileHandler('investment.log')
+# file_handler.setLevel(logging.WARNING)
+# file_handler.setFormatter(formatter)
+
+# logger = logging.getLogger('Investment')
+# logger.addHandler(file_handler)
+# logging.warning('Investmen:')
+logger.warning('Investmen:')
 
 
 async def close_project_donation(
@@ -78,3 +93,15 @@ async def investment(
     await session.refresh(obj)
 
     return obj
+
+
+def add_to_investment(
+        obj: Union[CharityProject, Donation],
+        session: AsyncSession
+) -> Union[CharityProject, Donation]:
+    logger.warning(f'>>> {type(obj)} {obj.id}')
+    investment_queue.put(investment(obj, session))
+    result = investment_queue.get()
+
+    logger.warning(f'<<< {type(result)}')
+    return result

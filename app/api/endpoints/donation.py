@@ -11,7 +11,7 @@ from app.schemas.donation import (
     DonationDBSuperUser,
     DonationDBUser,
 )
-from app.services.investment import investment
+from app.services.investment import investment, add_to_investment
 
 router = APIRouter()
 
@@ -31,7 +31,8 @@ async def create_donation(
     """
 
     new_donation = await donation_crud.create(donation, session, user)
-    new_donation = await investment(new_donation, session)
+    # new_donation = await investment(new_donation, session)
+    new_donation = await add_to_investment(new_donation, session)
     return jsonable_encoder(new_donation)
 
 

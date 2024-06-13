@@ -17,7 +17,11 @@ from app.schemas.charity_project import (
     CharityProjectDB,
     CharityProjectUpdate,
 )
-from app.services.investment import close_project_donation, investment
+from app.services.investment import (
+    close_project_donation,
+    investment,
+    add_to_investment
+)
 
 router = APIRouter()
 
@@ -52,7 +56,8 @@ async def create_project(
 
     await check_name_duplicate(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
-    new_project = await investment(new_project, session)
+    # new_project = await investment(new_project, session)
+    new_project = await add_to_investment(new_project, session)
     return jsonable_encoder(new_project)
 
 
