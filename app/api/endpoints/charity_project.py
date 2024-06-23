@@ -2,12 +2,13 @@ from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.utils import to_investment
 from app.api.validators import (
     check_name_duplicate,
     check_project_empty,
     check_project_exists,
     check_project_full_amount,
-    check_project_open,
+    check_project_open
 )
 from app.core.db import get_async_session
 from app.core.user import current_superuser
@@ -15,13 +16,9 @@ from app.crud import charity_project_crud
 from app.schemas.charity_project import (
     CharityProjectCreate,
     CharityProjectDB,
-    CharityProjectUpdate,
+    CharityProjectUpdate
 )
-from app.services.investment import (
-    close_project_donation,
-    investment,
-    add_to_investment
-)
+from app.services.investment import close_project_donation
 
 router = APIRouter()
 
@@ -56,8 +53,9 @@ async def create_project(
 
     await check_name_duplicate(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
-    # new_project = await investment(new_project, session)
-    new_project = await add_to_investment(new_project, session)
+
+    new_project = await to_investment(new_project, session)
+
     return jsonable_encoder(new_project)
 
 
@@ -109,6 +107,7 @@ async def update_project(
 
     project = await charity_project_crud.update(project, project_in, session)
     project = await close_project_donation(project)
-    project = await investment(project, session)
+
+    project = await to_investment(project, session)
 
     return jsonable_encoder(project)

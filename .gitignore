@@ -136,7 +136,7 @@ backup/
 *.bak
 
 # db
-fastapi.db
+*.db
 
 # vim swap
 *.swp

@@ -1,31 +1,12 @@
 from collections import deque
 from datetime import datetime
-from queue import Queue
-from typing import Union
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.crud import charity_project_crud, donation_crud
-from app.models import CharityProject, Donation
-from app.core.config import logger
-
-investment_queue = Queue()
-
-# formatter = logging.Formatter('%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
-
-# file_handler = logging.FileHandler('investment.log')
-# file_handler.setLevel(logging.WARNING)
-# file_handler.setFormatter(formatter)
-
-# logger = logging.getLogger('Investment')
-# logger.addHandler(file_handler)
-# logging.warning('Investmen:')
-logger.warning('Investmen:')
+from app.models import BaseProjectDonation, CharityProject, Donation
 
 
 async def close_project_donation(
-        obj: Union[CharityProject, Donation]
-) -> Union[CharityProject, Donation]:
+        obj: BaseProjectDonation
+) -> BaseProjectDonation:
     """Закрываем полностью проинвестированный проект/пожертвование."""
 
     if obj.invested_amount == obj.full_amount:
@@ -37,7 +18,7 @@ async def close_project_donation(
 async def calculate_investment(
         project_queue: deque[CharityProject],
         donation_queue: deque[Donation]
-) -> list[Union[CharityProject, Donation]]:
+) -> list[BaseProjectDonation]:
     """Вычисления при инвестировании."""
 
     changed_objs = []
@@ -74,34 +55,14 @@ async def calculate_investment(
 
 
 async def investment(
-        obj: Union[CharityProject, Donation],
-        session: AsyncSession
-) -> Union[CharityProject, Donation]:
+        not_invested_projects: list[CharityProject],
+        not_invested_donations: list[Donation]
+) -> list[BaseProjectDonation]:
     """Инвестируем пожертвования в проекты."""
 
-    not_invested_projects = await charity_project_crud.get_multi(
-        session, not_full_invested=True)
-    not_invested_donations = await donation_crud.get_multi(
-        session, not_full_invested=True)
     project_queue = deque(not_invested_projects)
     donation_queue = deque(not_invested_donations)
 
     changed_objs = await calculate_investment(project_queue, donation_queue)
 
-    session.add_all(changed_objs)
-    await session.commit()
-    await session.refresh(obj)
-
-    return obj
-
-
-def add_to_investment(
-        obj: Union[CharityProject, Donation],
-        session: AsyncSession
-) -> Union[CharityProject, Donation]:
-    logger.warning(f'>>> {type(obj)} {obj.id}')
-    investment_queue.put(investment(obj, session))
-    result = investment_queue.get()
-
-    logger.warning(f'<<< {type(result)}')
-    return result
+    return changed_objs
