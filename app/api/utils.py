@@ -23,7 +23,7 @@ async def to_investment(
     elif isinstance(obj, Donation):
         not_invested_donations.append(obj)
 
-    changed_objs = await investment(
+    changed_objs = investment(
         not_invested_projects,
         not_invested_donations
     )

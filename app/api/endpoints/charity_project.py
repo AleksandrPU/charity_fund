@@ -106,7 +106,7 @@ async def update_project(
         await check_project_full_amount(project, project_in.full_amount)
 
     project = await charity_project_crud.update(project, project_in, session)
-    project = await close_project_donation(project)
+    project = close_project_donation(project)
 
     project = await to_investment(project, session)
 

@@ -4,10 +4,10 @@ from datetime import datetime
 from app.models import BaseProjectDonation, CharityProject, Donation
 
 
-async def close_project_donation(
+def close_project_donation(
         obj: BaseProjectDonation
 ) -> BaseProjectDonation:
-    """Закрываем полностью проинвестированный проект/пожертвование."""
+    """Закрываем завершенный проект/пожертвование."""
 
     if obj.invested_amount == obj.full_amount:
         obj.fully_invested = True
@@ -15,7 +15,7 @@ async def close_project_donation(
     return obj
 
 
-async def calculate_investment(
+def calculate_investment(
         project_queue: deque[CharityProject],
         donation_queue: deque[Donation]
 ) -> list[BaseProjectDonation]:
@@ -39,13 +39,13 @@ async def calculate_investment(
             project.invested_amount += deficit
             donation.invested_amount += deficit
 
-            project = await close_project_donation(project)
+            project = close_project_donation(project)
             if project.fully_invested:
                 project_queue.popleft()
 
             changed_objs.append(project)
 
-        donation = await close_project_donation(donation)
+        donation = close_project_donation(donation)
         if donation.fully_invested:
             donation_queue.popleft()
 
@@ -54,7 +54,7 @@ async def calculate_investment(
     return changed_objs
 
 
-async def investment(
+def investment(
         not_invested_projects: list[CharityProject],
         not_invested_donations: list[Donation]
 ) -> list[BaseProjectDonation]:
@@ -63,6 +63,6 @@ async def investment(
     project_queue = deque(not_invested_projects)
     donation_queue = deque(not_invested_donations)
 
-    changed_objs = await calculate_investment(project_queue, donation_queue)
+    changed_objs = calculate_investment(project_queue, donation_queue)
 
     return changed_objs
