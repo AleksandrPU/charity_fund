@@ -11,24 +11,18 @@ async def to_investment(
 ) -> BaseProjectDonation:
     """Подготовить данные для инвестирования."""
 
-    not_invested_projects = await charity_project_crud.get_multi(
-        session, not_full_invested=True)
-    not_invested_donations = await donation_crud.get_multi(
-        session, not_full_invested=True)
-
     if obj.invested_amount is None:
         setattr(obj, 'invested_amount', 0)
+
+    not_invested_projects_donations = None
     if isinstance(obj, CharityProject):
-        not_invested_projects.append(obj)
+        not_invested_projects_donations = await donation_crud.get_multi(
+            session, not_full_invested=True)
     elif isinstance(obj, Donation):
-        not_invested_donations.append(obj)
+        not_invested_projects_donations = await charity_project_crud.get_multi(
+            session, not_full_invested=True)
 
-    changed_objs = investment(
-        not_invested_projects,
-        not_invested_donations
-    )
-
-    session.add_all(changed_objs)
+    session.add_all(investment(obj, not_invested_projects_donations))
     await session.commit()
     await session.refresh(obj)
 
