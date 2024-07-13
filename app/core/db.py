@@ -23,7 +23,7 @@ Base.metadata = MetaData(naming_convention={
     'pk': 'pk_%(table_name)s'
 })
 
-engine = create_async_engine(settings.database_url)
+engine = create_async_engine(settings.database_url, echo=settings.debug_echo)
 
 AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession)
 
