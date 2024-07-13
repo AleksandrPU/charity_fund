@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     token_lifetime: int = 3600
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
+    debug_echo: Optional[bool] = False
 
     class Config:
         env_file = '.env'
