@@ -1,7 +1,13 @@
 from datetime import datetime
 from typing import Optional, Union
 
-from pydantic import BaseModel, Extra, Field, PositiveInt, validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    PositiveInt,
+    validator
+)
 
 from app.core.constants import (
     DESCRIPTION_MIN_LENGTH,
@@ -21,7 +27,7 @@ class CharityProjectCreate(BaseModel):
     description: str = Field(min_length=DESCRIPTION_MIN_LENGTH)
     full_amount: PositiveInt
 
-    _name_cant_be_null = validator('name', allow_reuse=True)(name_cant_be_null)
+    _name_cant_be_null = validator('name')(name_cant_be_null)
 
 
 class CharityProjectDB(CharityProjectCreate):
@@ -39,7 +45,6 @@ class CharityProjectUpdate(BaseModel):
     description: Optional[str] = Field(min_length=DESCRIPTION_MIN_LENGTH)
     full_amount: Optional[PositiveInt]
 
-    _name_cant_be_null = validator('name', allow_reuse=True)(name_cant_be_null)
+    _name_cant_be_null = validator('name')(name_cant_be_null)
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra='forbid')

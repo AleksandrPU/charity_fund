@@ -29,7 +29,7 @@ class CRUDBase:
             session: AsyncSession,
             user: Optional[User] = None,
     ) -> Union[CharityProject, Donation]:
-        obj_in_data = obj_in.dict()
+        obj_in_data = obj_in.model_dump()
         if user is not None:
             obj_in_data['user_id'] = user.id
 
