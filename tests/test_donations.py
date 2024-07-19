@@ -182,7 +182,8 @@ def test_donation_invalid(user_client, json_data):
     ],
     ids=['superuser', 'user', 'anonymous'],
 )
-def test_donations_cant_be_updated(donation, client, user_role):
+def test_donations_cant_be_updated(donation, client, user_role, request):
+    client = request.getfixturevalue(client)
     response = client.patch(
         DONATON_DETAILS_URL.format(donation_id=donation.id)
     )
@@ -201,7 +202,8 @@ def test_donations_cant_be_updated(donation, client, user_role):
     ],
     ids=['superuser', 'user', 'anonymous'],
 )
-def test_donations_cant_be_deleted(donation, client, user_role):
+def test_donations_cant_be_deleted(donation, client, user_role, request):
+    client = request.getfixturevalue(client)
     response = client.delete(
         DONATON_DETAILS_URL.format(donation_id=donation.id)
     )
