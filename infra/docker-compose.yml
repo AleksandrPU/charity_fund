@@ -1,0 +1,21 @@
+volumes:
+  pg_data_production:
+
+services:
+  db:
+    image: postgres:16-alpine
+    env_file: ../.env
+    volumes:
+      - pg_data_production:/var/lib/postgresql/data
+
+  backend:
+    build: ../.
+    env_file: ../.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ../.env:/app/.env
+    command:  bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
