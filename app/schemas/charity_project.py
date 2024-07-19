@@ -5,9 +5,9 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    PositiveInt,
-    validator
+    PositiveInt
 )
+from pydantic.functional_validators import field_validator
 
 from app.core.constants import (
     DESCRIPTION_MIN_LENGTH,
@@ -27,7 +27,8 @@ class CharityProjectCreate(BaseModel):
     description: str = Field(min_length=DESCRIPTION_MIN_LENGTH)
     full_amount: PositiveInt
 
-    _name_cant_be_null = validator('name')(name_cant_be_null)
+    _name_cant_be_null = field_validator(
+        'name', mode='before')(name_cant_be_null)
 
 
 class CharityProjectDB(CharityProjectCreate):
@@ -45,6 +46,7 @@ class CharityProjectUpdate(BaseModel):
     description: Optional[str] = Field(min_length=DESCRIPTION_MIN_LENGTH)
     full_amount: Optional[PositiveInt]
 
-    _name_cant_be_null = validator('name')(name_cant_be_null)
+    _name_cant_be_null = field_validator(
+        'name', mode='before')(name_cant_be_null)
 
     model_config = ConfigDict(extra='forbid')
