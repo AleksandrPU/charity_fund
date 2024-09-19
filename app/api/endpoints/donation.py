@@ -7,24 +7,20 @@ from app.core.db import get_async_session
 from app.core.user import current_superuser, current_user
 from app.crud import donation_crud
 from app.models import User
-from app.schemas.donation import (
-    DonationCreate,
-    DonationDBSuperUser,
-    DonationDBUser
-)
+from app.schemas.donation import DonationCreate, DonationDBSuperUser, DonationDBUser
 
 router = APIRouter()
 
 
 @router.post(
-    '/',
+    "/",
     response_model=DonationDBUser,
     response_model_exclude_none=True,
 )
 async def create_donation(
-        donation: DonationCreate,
-        session: AsyncSession = Depends(get_async_session),
-        user: User = Depends(current_user)
+    donation: DonationCreate,
+    session: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_user),
 ):
     """Добавить пожертвование.
     Только для зарегистрированных пользователей!
@@ -38,13 +34,13 @@ async def create_donation(
 
 
 @router.get(
-    '/',
+    "/",
     response_model=list[DonationDBSuperUser],
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
 async def get_all_donations(
-        session: AsyncSession = Depends(get_async_session)
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Вывести все пожертвования.
     Только для суперпользователей!
@@ -55,13 +51,13 @@ async def get_all_donations(
 
 
 @router.get(
-    '/my',
+    "/my",
     response_model=list[DonationDBUser],
     response_model_exclude_none=True,
 )
 async def get_user_donations(
-        session: AsyncSession = Depends(get_async_session),
-        user: User = Depends(current_user),
+    session: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_user),
 ):
     """Вывести пожертвования текущего пользователя.
     Только для зарегистрированных пользователей.

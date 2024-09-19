@@ -7,25 +7,23 @@ from app.schemas.charity_project import CharityProjectUpdate
 
 
 class GetMixin:
-
     async def get(
-            self,
-            obj_id: int,
-            session: AsyncSession
+        self,
+        obj_id: int,
+        session: AsyncSession,
     ) -> CharityProject:
         obj = await session.execute(
-            select(self.model).where(self.model.id == obj_id)
+            select(self.model).where(self.model.id == obj_id),
         )
         return obj.scalars().first()
 
 
 class UpdateMixin(GetMixin):
-
     async def update(
-            self,
-            db_obj: CharityProject,
-            obj_in: CharityProjectUpdate,
-            session: AsyncSession
+        self,
+        db_obj: CharityProject,
+        obj_in: CharityProjectUpdate,
+        session: AsyncSession,
     ) -> CharityProject:
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.model_dump(exclude_unset=True)
@@ -40,11 +38,10 @@ class UpdateMixin(GetMixin):
 
 
 class DeleteMixin(GetMixin):
-
     async def remove(
-            self,
-            db_obj: CharityProject,
-            session: AsyncSession
+        self,
+        db_obj: CharityProject,
+        session: AsyncSession,
     ) -> CharityProject:
         await session.delete(db_obj)
         await session.commit()

@@ -7,14 +7,13 @@ from app.models import CharityProject, Donation, User
 
 
 class CRUDBase:
-
     def __init__(self, model):
         self.model = model
 
     async def get_multi(
-            self,
-            session: AsyncSession,
-            not_full_invested: bool = False
+        self,
+        session: AsyncSession,
+        not_full_invested: bool = False,
     ) -> list[Union[CharityProject, Donation]]:
         query = select(self.model)
         if not_full_invested:
@@ -24,14 +23,14 @@ class CRUDBase:
         return db_objs.scalars().all()
 
     async def create(
-            self,
-            obj_in,
-            session: AsyncSession,
-            user: Optional[User] = None,
+        self,
+        obj_in,
+        session: AsyncSession,
+        user: Optional[User] = None,
     ) -> Union[CharityProject, Donation]:
         obj_in_data = obj_in.model_dump()
         if user is not None:
-            obj_in_data['user_id'] = user.id
+            obj_in_data["user_id"] = user.id
 
         db_obj = self.model(**obj_in_data)
 

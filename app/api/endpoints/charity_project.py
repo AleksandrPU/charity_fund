@@ -8,7 +8,7 @@ from app.api.validators import (
     check_project_empty,
     check_project_exists,
     check_project_full_amount,
-    check_project_open
+    check_project_open,
 )
 from app.core.db import get_async_session
 from app.core.user import current_superuser
@@ -16,7 +16,7 @@ from app.crud import charity_project_crud
 from app.schemas.charity_project import (
     CharityProjectCreate,
     CharityProjectDB,
-    CharityProjectUpdate
+    CharityProjectUpdate,
 )
 from app.services.investment import close_project_donation
 
@@ -24,12 +24,12 @@ router = APIRouter()
 
 
 @router.get(
-    '/',
+    "/",
     response_model=list[CharityProjectDB],
     response_model_exclude_none=True,
 )
 async def get_all_projects(
-        session: AsyncSession = Depends(get_async_session)
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Вывести все текущие проекты."""
 
@@ -38,14 +38,14 @@ async def get_all_projects(
 
 
 @router.post(
-    '/',
+    "/",
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
-    dependencies=[Depends(current_superuser)]
+    dependencies=[Depends(current_superuser)],
 )
 async def create_project(
-        charity_project: CharityProjectCreate,
-        session: AsyncSession = Depends(get_async_session)
+    charity_project: CharityProjectCreate,
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Добавить проект.
     Только для суперпользователей!
@@ -60,14 +60,14 @@ async def create_project(
 
 
 @router.delete(
-    '/{project_id}',
+    "/{project_id}",
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
-    dependencies=[Depends(current_superuser)]
+    dependencies=[Depends(current_superuser)],
 )
 async def delete_project(
-        project_id: int,
-        session: AsyncSession = Depends(get_async_session)
+    project_id: int,
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Удалить неинвестированный проект.
     Только для суперпользователей!
@@ -82,15 +82,15 @@ async def delete_project(
 
 
 @router.patch(
-    '/{project_id}',
+    "/{project_id}",
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
-    dependencies=[Depends(current_superuser)]
+    dependencies=[Depends(current_superuser)],
 )
 async def update_project(
-        project_id: int,
-        project_in: CharityProjectUpdate,
-        session: AsyncSession = Depends(get_async_session)
+    project_id: int,
+    project_in: CharityProjectUpdate,
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Изменить проект.
     Только для суперпользователей!

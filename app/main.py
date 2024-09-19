@@ -16,7 +16,7 @@ async def startup(app: FastAPI):
 app = FastAPI(
     title=settings.app_title,
     description=settings.app_description,
-    lifespan=startup
+    lifespan=startup,
 )
 
 app.include_router(main_router)

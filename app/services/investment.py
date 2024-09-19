@@ -5,7 +5,7 @@ from app.models import BaseProjectDonation
 
 
 def close_project_donation(
-        obj: BaseProjectDonation
+    obj: BaseProjectDonation,
 ) -> BaseProjectDonation:
     """Закрываем завершенный проект/пожертвование."""
 
@@ -16,8 +16,8 @@ def close_project_donation(
 
 
 def investment(
-        obj: BaseProjectDonation,
-        not_invested_projects_donations: list[BaseProjectDonation]
+    obj: BaseProjectDonation,
+    not_invested_projects_donations: list[BaseProjectDonation],
 ) -> list[BaseProjectDonation]:
     """Инвестируем пожертвования в проекты."""
 
@@ -29,7 +29,7 @@ def investment(
 
         deficit: int = min(
             obj.full_amount - obj.invested_amount,
-            invest_item.full_amount - invest_item.invested_amount
+            invest_item.full_amount - invest_item.invested_amount,
         )
 
         obj.invested_amount += deficit
