@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, MetaData
+from sqlalchemy.engine import URL
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, declared_attr, sessionmaker
 
@@ -24,7 +25,23 @@ Base.metadata = MetaData(
     }
 )
 
-engine = create_async_engine(settings.database_url, echo=settings.debug_echo)
+url = URL(
+    settings.db_drivername,
+    settings.postgres_user,
+    settings.postgres_password,
+    settings.postgres_host,
+    settings.postgres_port,
+    settings.postgres_db,
+    {},
+)
+
+engine = create_async_engine(
+    url,
+    echo=settings.debug_echo,
+    isolation_level=(
+        "REPEATABLE READ" if "postgresql" in settings.db_drivername else "SERIALIZABLE"
+    ),
+)
 
 AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession)
 
