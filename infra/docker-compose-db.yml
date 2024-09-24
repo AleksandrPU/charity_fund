@@ -1,0 +1,15 @@
+name: cat_charity_fund
+
+volumes:
+  pg_data_production:
+
+services:
+  db:
+    container_name: db
+    image: postgres:16-alpine
+    restart: always
+    env_file: ../.env
+    volumes:
+      - pg_data_production:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
