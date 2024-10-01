@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     postgres_port: Optional[int] = None
     postgres_user: Optional[str] = None
     postgres_password: Optional[str] = None
-    postgres_db: str = "./fastapi.db"
+    postgres_base: str = "./fastapi.db"
 
     secret: str = "secret"
 

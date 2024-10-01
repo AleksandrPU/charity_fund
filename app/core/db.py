@@ -33,7 +33,7 @@ url = URL(
     settings.postgres_password,
     settings.postgres_host,
     settings.postgres_port,
-    settings.postgres_db,
+    settings.postgres_base,
     {},
 )
 
