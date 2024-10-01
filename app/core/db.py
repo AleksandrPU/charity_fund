@@ -41,7 +41,9 @@ engine = create_async_engine(
     url,
     echo=settings.debug_echo,
     isolation_level=(
-        "REPEATABLE READ" if "postgresql" in settings.db_drivername else "SERIALIZABLE"
+        "REPEATABLE READ"
+        if "postgresql" in settings.db_drivername
+        else "SERIALIZABLE"
     ),
 )
 

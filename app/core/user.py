@@ -53,10 +53,13 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     ) -> None:
         if len(password) < PASSWORD_MIN_LENGTH:
             raise InvalidPasswordException(
-                reason="Пароль должен быть не менее " f"{PASSWORD_MIN_LENGTH} символов"
+                reason="Пароль должен быть не менее "
+                f"{PASSWORD_MIN_LENGTH} символов"
             )
         if user.email in password:
-            raise InvalidPasswordException(reason="Пароль не должен содержать емайл")
+            raise InvalidPasswordException(
+                reason="Пароль не должен содержать емайл"
+            )
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
