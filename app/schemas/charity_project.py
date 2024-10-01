@@ -23,11 +23,17 @@ def name_cant_be_null(value: str) -> Union[str, None]:
 
 
 class CharityProjectCreate(BaseModel):
-    name: str = Field(min_length=NAME_MIN_LENGTH, max_length=NAME_MAX_LENGTH)
+    name: str = Field(
+        min_length=NAME_MIN_LENGTH,
+        max_length=NAME_MAX_LENGTH,
+    )
     description: str = Field(min_length=DESCRIPTION_MIN_LENGTH)
     full_amount: PositiveInt
 
-    _name_cant_be_null = field_validator("name", mode="before")(name_cant_be_null)
+    _name_cant_be_null = field_validator(
+        "name",
+        mode="before",
+    )(name_cant_be_null)
 
 
 class CharityProjectDB(CharityProjectCreate):
@@ -39,13 +45,20 @@ class CharityProjectDB(CharityProjectCreate):
 
 
 class CharityProjectUpdate(BaseModel):
-    name: Optional[str] = Field(
+    name: str | None = Field(
+        None,
         min_length=NAME_MIN_LENGTH,
         max_length=NAME_MAX_LENGTH,
     )
-    description: Optional[str] = Field(min_length=DESCRIPTION_MIN_LENGTH)
-    full_amount: Optional[PositiveInt]
+    description: str | None = Field(
+        None,
+        min_length=DESCRIPTION_MIN_LENGTH,
+    )
+    full_amount: PositiveInt | None = None
 
-    _name_cant_be_null = field_validator("name", mode="before")(name_cant_be_null)
+    _name_cant_be_null = field_validator(
+        "name",
+        mode="before",
+    )(name_cant_be_null)
 
     model_config = ConfigDict(extra="forbid")
