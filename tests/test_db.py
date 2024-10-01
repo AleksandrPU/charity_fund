@@ -32,7 +32,8 @@ def test_check_migration_file_exist():
 
 
 def test_check_db_url():
-    for attr_name, attr_value in Settings.schema()['properties'].items():
+    for attr_name, attr_value in Settings.model_json_schema(
+    )['properties'].items():
         if 'db' in attr_name or 'database' in attr_name:
             assert 'sqlite+aiosqlite' in attr_value['default'], (
                 'Укажите значение по умолчанию для подключения базы данных '
