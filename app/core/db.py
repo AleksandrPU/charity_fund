@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, MetaData
-from sqlalchemy.engine import URL
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import declarative_base, declared_attr, sessionmaker
+from sqlalchemy import Column, Integer, MetaData, URL
+from sqlalchemy.ext.asyncio import (
+    async_sessionmaker,
+    create_async_engine,
+)
+from sqlalchemy.orm import declarative_base, declared_attr  # , sessionmaker
 
 from app.core.config import settings
 
@@ -43,7 +45,7 @@ engine = create_async_engine(
     ),
 )
 
-AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession)
+AsyncSessionLocal = async_sessionmaker(engine)
 
 
 async def get_async_session():
