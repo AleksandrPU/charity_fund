@@ -11,7 +11,7 @@ class GetMixin:
         self,
         obj_id: int,
         session: AsyncSession,
-    ) -> CharityProject:
+    ) -> CharityProject | None:
         obj = await session.execute(
             select(self.model).where(self.model.id == obj_id),
         )
