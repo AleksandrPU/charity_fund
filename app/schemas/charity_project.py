@@ -1,12 +1,7 @@
 from datetime import datetime
 from typing import Optional, Union
 
-from pydantic import (
-    BaseModel,
-    ConfigDict,
-    Field,
-    PositiveInt,
-)
+from pydantic import BaseModel, ConfigDict, Field, PositiveInt
 from pydantic.functional_validators import field_validator
 
 from app.core.constants import (

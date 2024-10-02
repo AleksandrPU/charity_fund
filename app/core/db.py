@@ -1,8 +1,5 @@
-from sqlalchemy import Column, Integer, MetaData, URL
-from sqlalchemy.ext.asyncio import (
-    async_sessionmaker,
-    create_async_engine,
-)
+from sqlalchemy import URL, Column, Integer, MetaData
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base, declared_attr
 
 from app.core.config import settings
