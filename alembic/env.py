@@ -1,5 +1,4 @@
 import asyncio
-import os
 from logging.config import fileConfig
 
 from dotenv import load_dotenv
@@ -10,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from alembic import context
 
 from app.core.base import Base
+from app.core.db import url as db_url
 
 load_dotenv('.env')
 
@@ -19,7 +19,7 @@ config = context.config
 
 config.set_main_option(
     'sqlalchemy.url',
-    os.getenv('DATABASE_URL', 'sqlite+aiosqlite:///./fastapi.db')
+    db_url.render_as_string(hide_password=False)
 )
 
 # Interpret the config file for Python logging.
