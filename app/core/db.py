@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.orm import declarative_base, declared_attr  # , sessionmaker
+from sqlalchemy.orm import declarative_base, declared_attr
 
 from app.core.config import settings
 
