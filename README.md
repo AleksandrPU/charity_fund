@@ -1,4 +1,4 @@
-# Приложение для ведения проектов и пожертвований благотворительного фонда
+# Приложение для благотворительного фонда
 
 ## Описание:
 
@@ -14,17 +14,17 @@
 
 ## Использование:
 
-Клонировать репозиторий и перейти в него в командной строке:
+1. Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-git clone git@github.com:AleksandrPU/cat_charity_fund.git
+git clone git@github.com:AleksandrPU/charity_fund.git
 ```
 
 ```
-cd cat_charity_fund
+cd charity_fund
 ```
 
-Создать и активировать виртуальное окружение:
+2. Создать и активировать виртуальное окружение:
 
 ```
 python3.12 -m venv venv
@@ -44,7 +44,7 @@ python3.12 -m venv venv
     source venv/scripts/activate
     ```
 
-Установить зависимости из файла requirements.txt:
+3. Установить зависимости из файла requirements.txt:
 
 ```
 python3 -m pip install --upgrade pip
@@ -54,13 +54,7 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Создать базу данных для приложения:
-
-```
-alembic upgrade head                                                                                                                         [shadow:mynote]
-```
-
-Скопировать файл ```env.example``` в файли ```.env```. Задать в файле ```.env``` секретный ключ ```SECRET```, а также 
+4. Скопировать файл ```env.example``` в файли ```.env```. Задать в файле ```.env``` секретный ключ ```SECRET```, а также 
 логин и пароль для суперпользователя.
 Значение ```SECRET``` можно сгенерировать командой:
 
@@ -68,10 +62,16 @@ alembic upgrade head                                                            
 python -c 'import secrets; print(secrets.token_hex())'
 ```
 
-Запустить проект:
+5. Создать базу данных для приложения:
 
 ```
-uvicorn app.main:app
+alembic upgrade head
+```
+
+6. Запустить проект:
+
+```
+python -m app
 ```
 
 По умолчанию приложение запустится по адресу [http://localhost:8000](http://localhost:8000).
