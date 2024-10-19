@@ -12,7 +12,7 @@ async def to_investment(
     """Подготовить данные для инвестирования."""
 
     if obj.invested_amount is None:
-        setattr(obj, "invested_amount", 0)
+        obj.invested_amount = 0
 
     not_invested_projects_donations = None
     if isinstance(obj, CharityProject):
