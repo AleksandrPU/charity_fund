@@ -140,3 +140,6 @@ backup/
 
 # vim swap
 *.swp
+
+# ruff
+.ruff_cache/
