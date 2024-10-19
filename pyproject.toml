@@ -1,10 +1,22 @@
 [tool.ruff]
 line-length = 79
 
-[tool.black]
-line-length = 79
-target-version = ["py312"]
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
 
-[tool.isort]
-profile = "black"
-line_length = 79
+[tool.pyright]
+venvPath = "."
+venv = "venv"
