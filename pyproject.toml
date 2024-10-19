@@ -20,3 +20,16 @@ select = [
 [tool.pyright]
 venvPath = "."
 venv = "venv"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["app", "."]
+norecursedirs = "env/*"
+addopts = "-vv -p no:cacheprovider --disable-warnings"
+testpaths = ["tests"]
+python_files = "test_*.py"
+
+[tool.bandit]
+exclude_dirs = ["tests", "__pycache__"]
+tests = ["B201", "B301"]
+skips = ["B101", "B601"]
