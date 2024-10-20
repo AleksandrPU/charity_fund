@@ -22,16 +22,18 @@ async def create_user(
     is_superuser: bool = False,
 ):
     try:
-        async with get_async_session_context() as session:
-            async with get_user_db_context(session) as user_db:
-                async with get_user_manager_context(user_db) as user_manager:
-                    await user_manager.create(
-                        UserCreate(
-                            email=email,
-                            password=password,
-                            is_superuser=is_superuser,
-                        )
-                    )
+        async with (
+            get_async_session_context() as session,
+            get_user_db_context(session) as user_db,
+            get_user_manager_context(user_db) as user_manager,
+        ):
+            await user_manager.create(
+                UserCreate(
+                    email=email,
+                    password=password,
+                    is_superuser=is_superuser,
+                )
+            )
         logger.info("Пользователь %s создан.", email)
     except UserAlreadyExists:
         logger.warning("Пользователь %s уже зарегистрирован.", email)
